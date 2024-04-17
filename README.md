@@ -5,8 +5,8 @@ Pràctica - Collections de Programació
 He creado las primeras clases con los atributos requeridos y he implementado en ellas los metodos necesarios.
 He creado la clase Supermercat desde donde se gestionara la aplicacion (menus y demas metodos necesarios).
 En la clase Supermercat he creado un metodo booleano para comprobar si en el arrayList de productes hay menos de 100
-productos.
-Este metodo lo utilizo en dentro de los metodos afegir* para que haga la comprobacion antes de añadir un producto.
+productos. El metodo 'noSuperaNumMaxProd' lo utilizo en dentro de los metodos afegir* para que haga la comprobacion
+antes de añadir un producto.
 
 Enunciat
 

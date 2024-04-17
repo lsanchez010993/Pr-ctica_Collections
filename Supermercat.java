@@ -60,9 +60,33 @@ public class Supermercat {
 
     }
 
+    public static int agruparRepetidos(ArrayList<Producte> ali) {
+        int contador = 1;
+        for (int i = 0; i < ali.size(); i++) {
+            Producte a = ali.get(i);
+            for (int j = i + 1; j < ali.size(); j++) {
+                Producte b = ali.get(j);
+                if (a.getNom().equals(b.getNom()) && a.getCodiBarres() == b.getCodiBarres()) {
+                    ali.remove(j);
+                    contador++;
+                    j--;
+                }
+            }
+        }
+        return contador;
+    }
+
+
     public static void pasar_X_Caja() {
         for (Producte prod : alimentacio) {
             System.out.println("Alimentacio:");
+            System.out.println("___________________");
+            System.out.println("Fecha de compra" + LocalDate.now());
+            System.out.println("SapaMercat");
+            ;
+            System.out.println("___________________");
+            System.out.println("Detall:");
+            System.out.println("Nom:" + prod.getNom());
 
         }
         for (Producte prod : textil) {
@@ -98,7 +122,8 @@ public class Supermercat {
             //En productes se encuentran todos los productos. Mediante este array compruebo el
             //numero de productos introducidos
             productes.add(new Textil(preu, nom, codiBarres, composicio));
-        } else System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
+        } else
+            System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
 
 
     }
@@ -125,7 +150,8 @@ public class Supermercat {
             //En productes se encuentran todos los productos. Mediante este array compruebo el
             //numero de productos introducidos
             productes.add(new Electronica(preu, nom, codiBarres, dias_garantia));
-        } else System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
+        } else
+            System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
 
 
     }
@@ -155,7 +181,8 @@ public class Supermercat {
             //En productes se encuentran todos los productos. Mediante este array compruebo el
             //numero de productos introducidos
             productes.add(new Alimentacio(preu, nom, codiBarres, dataCaducitat));
-        } else System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
+        } else
+            System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
     }
 
     /**
