@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 public class Alimentacio extends Producte {
     private LocalDate dataCaducitat;
-    private ArrayList<Alimentacio> alimentacio = new ArrayList<>();
+
 
 
     public Alimentacio(float preu, String nom, int codiBarres, LocalDate data) {
         super(preu, nom, codiBarres);
         this.dataCaducitat = data;
-        alimentacio.add(new Alimentacio(preu, nom, codiBarres, data));
+
+
 
 
     }
