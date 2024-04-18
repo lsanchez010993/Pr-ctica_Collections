@@ -64,11 +64,12 @@ public class Supermercat {
 
     /**
      * La funcion se encarga de contar y eliminar los productos repetidos mediante un bucle for anidado.
-     *La razón por la que no he utilizado HasSet para eliminar repetidos se debe a que previamente he tenido que contarlos
+     * La razón por la que no he utilizado HasSet para eliminar repetidos se debe a que previamente he tenido que contarlos
      * para saber la cantidad.
-     * @param listaProductos lista de productos pasada por parametro.
+     *
+     * @param listaProductos Lista de productos pasada por parametro.
      */
-    public static void contarRepetidos(ArrayList<Producte> listaProductos) {
+    public static void contar_Y_EliminarRepetidos(ArrayList<Producte> listaProductos) {
         Map<String, Integer> cantidadPorNombreYCodigo = new HashMap<>();
 
         // Contar la cantidad de productos por nombre y código de barras
@@ -97,35 +98,58 @@ public class Supermercat {
         }
     }
 
+    /**
+     *
+     * @param listaProductos Lista de productos almacenas en arrayList
+     * @return Devuelve el resultado de la suma de los precios de todos los productos
+     */
+    public static float calcularTotal(ArrayList<Producte> listaProductos) {
+        float total = 0;
+        for (Producte p : listaProductos) {
+            total += p.getPreu();
+        }
+        return total;
+    }
+public static void mostrarCarro(Producte prod, String tipo){
+
+        //Muestra todos los productos que pertenece a Alimentacio:
+        if (prod.getClass().getSimpleName().equals(tipo)) {
+
+
+            System.out.println("Nom:" + prod.getNom() + ". Cantidad:" + prod.getCantidad() + "Preu unitari: " +
+                    prod.getPreu() + " €");
+
+            System.out.println("\n");
+
+        }
+    }
 
     public static void pasar_X_Caja() {
-
-       contarRepetidos(productes);
-
+        //La funcion 'calcularTotal' guarda en una variable el total de los productos almacenados en el carro
+        //antes de que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos.
+        float total = calcularTotal(productes);
+        contar_Y_EliminarRepetidos(productes);
+        System.out.println("___________________");
+        System.out.println("Fecha de compra: " + LocalDate.now());
+        System.out.println("SapaMercat");
+        System.out.println("-------------------");
+        System.out.println("Detall:");
 
         for (Producte prod : productes) {
             //Muestra todos los productos que pertenece a Alimentacio:
-            if (prod.getClass().getSimpleName().equals("Alimentacio")) {
-                System.out.println("Alimentacio:");
-                System.out.println("___________________");
-                System.out.println("Fecha de compra" + LocalDate.now());
-                System.out.println("SapaMercat");
-                System.out.println("___________________");
-                System.out.println("Detall:");
-                System.out.println("Nom:" + prod.getNom());
-                System.out.println("Cantidad:" + prod.getCantidad());
-                System.out.println("\n");
-
-            }
+            mostrarCarro(prod,"Alimentacio");
         }
-        for (Producte prod : textil) {
-            System.out.println("Textil:");
+        for (Producte prod : productes) {
+            mostrarCarro(prod,"Textil");
 
         }
-        for (Producte prod : electronica) {
-            System.out.println("Electronica:");
+        for (Producte prod : productes) {
+
+            mostrarCarro(prod,"Electronica");
+
 
         }
+        System.out.println("Total: "+total+" €");
     }
 
     public static void afegirTextil() {
