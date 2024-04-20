@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +12,6 @@ public class Supermercat {
     public static ArrayList<Electronica> electronica = new ArrayList<>();
     public static Scanner scan = new Scanner(System.in);
 
-    public static void main(String[] args) throws Exception {
-        menu();
-
-    }
 
     public static void menu() throws Exception {
         int opcio;
@@ -99,7 +96,6 @@ public class Supermercat {
     }
 
     /**
-     *
      * @param listaProductos Lista de productos almacenas en arrayList
      * @return Devuelve el resultado de la suma de los precios de todos los productos
      */
@@ -110,46 +106,61 @@ public class Supermercat {
         }
         return total;
     }
-public static void mostrarCarro(Producte prod, String tipo){
 
-        //Muestra todos los productos que pertenece a Alimentacio:
+    public static void mostrarCarro(Producte prod, String tipo) {
+
+        // Muestra todos los productos que pertenecen a Alimentacio:
         if (prod.getClass().getSimpleName().equals(tipo)) {
 
-
-            System.out.println("Nom:" + prod.getNom() + ". Cantidad:" + prod.getCantidad() + "Preu unitari: " +
-                    prod.getPreu() + " €");
-
-            System.out.println("\n");
+            System.out.printf("%-20s %-10d %-15.2f €\n", prod.getNom(), prod.getCantidad(), prod.getPreu());
 
         }
     }
 
     public static void pasar_X_Caja() {
-        //La funcion 'calcularTotal' guarda en una variable el total de los productos almacenados en el carro
-        //antes de que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos.
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dataCaducitat = LocalDate.parse("1999-11-11", formatter);
+        for (int i = 0; i < 20; i++) {
+            if (i < 5) {
+                productes.add(new Alimentacio(i + 1, "pera", 1111, dataCaducitat));
+            } else if (i >= 5 && i < 10) {
+                productes.add(new Alimentacio(i + 1, "manzana", 2222, dataCaducitat));
+            } else if (i >= 10 && i < 15) {
+                productes.add(new Alimentacio(i + 1, "naranja", 3333, dataCaducitat));
+            } else {
+                productes.add(new Alimentacio(i + 1, "plátano", 4444, dataCaducitat));
+            }
+        }
+        productes.add(new Alimentacio(11, "patata", 55432, dataCaducitat));
+        productes.add(new Alimentacio(11, "patata", 55432, dataCaducitat));
+
+        //La funcion 'calcularTotal' guarda en una variable la suma total del precio de los productos almacenados en el carro
+        //previamente a que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos.
         float total = calcularTotal(productes);
         contar_Y_EliminarRepetidos(productes);
+        //
         System.out.println("___________________");
         System.out.println("Fecha de compra: " + LocalDate.now());
         System.out.println("SapaMercat");
         System.out.println("-------------------");
         System.out.println("Detall:");
-
+        System.out.printf("%-20s %-10s %-15s %s\n", "Nom", "Cantidad", "Preu unitari", "€");
         for (Producte prod : productes) {
             //Muestra todos los productos que pertenece a Alimentacio:
-            mostrarCarro(prod,"Alimentacio");
+            mostrarCarro(prod, "Alimentacio");
         }
         for (Producte prod : productes) {
-            mostrarCarro(prod,"Textil");
+            mostrarCarro(prod, "Textil");
 
         }
         for (Producte prod : productes) {
 
-            mostrarCarro(prod,"Electronica");
+            mostrarCarro(prod, "Electronica");
 
 
         }
-        System.out.println("Total: "+total+" €");
+        System.out.println();
+        System.out.printf("%-20s %-10s %-1s %1.2f €\n", "", "", "Total:", total);
     }
 
     public static void afegirTextil() {
