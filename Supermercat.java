@@ -1,9 +1,6 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Supermercat {
     public static ArrayList<Producte> productes = new ArrayList<>();
@@ -67,29 +64,33 @@ public class Supermercat {
      * @param listaProductos Lista de productos pasada por parametro.
      */
     public static void contar_Y_EliminarRepetidos(ArrayList<Producte> listaProductos) {
-        Map<String, Integer> cantidadPorNombreYCodigo = new HashMap<>();
+        Map<String, Integer> numRepetidos = new HashMap<>();
+        HashSet<Producte> sinRepes = new HashSet<>(listaProductos);
 
-        // Contar la cantidad de productos por nombre y código de barras
+        // Cuento la cantidad de productos repetidos por nombre y código de barras.
+        //Luego utilizo el metodo getOrDefault de HashMap para contar las veces que se repiten cada producto.
+        //Cada vez que se repite un producto la cantidad del mismo se incrementa en 1.
+        //Importante: En HasMap las keys deben ser unicas. Debido a eso cada vez que encuentra una repetida el metodo
+        //getOrDefault actualiz su valor.
         for (Producte producto : listaProductos) {
             String clave = producto.getNom() + "-" + producto.getCodiBarres();
-            int cantidad = cantidadPorNombreYCodigo.getOrDefault(clave, 0);
-            cantidadPorNombreYCodigo.put(clave, cantidad + 1);
+            int cantidad = numRepetidos.getOrDefault(clave, 0);
+            numRepetidos.put(clave, cantidad + 1);
         }
+        //Una vez guardado el numero de veces que se repite cada producto procedo a utilizar un bucle anidado para actualizar
+        //la cantidad de veces que se repite cada producto y eliminar los repetidos.
 
-        // Actualizar la cantidad de productos en el ArrayList original y eliminar duplicados
         for (int i = 0; i < listaProductos.size(); i++) {
             Producte producto = listaProductos.get(i);
             String clave = producto.getNom() + "-" + producto.getCodiBarres();
-            Integer cantidadInteger = cantidadPorNombreYCodigo.get(clave);
-            if (cantidadInteger != null) {
-                producto.setCantidad(cantidadInteger);
-                for (int j = i + 1; j < listaProductos.size(); j++) {
-                    Producte otroProducto = listaProductos.get(j);
-                    String otraClave = otroProducto.getNom() + "-" + otroProducto.getCodiBarres();
-                    if (clave.equals(otraClave)) {
-                        listaProductos.remove(j);
-                        j--;
-                    }
+            int cantidad = numRepetidos.get(clave);
+            producto.setCantidad(cantidad);
+            for (int j = i + 1; j < listaProductos.size(); j++) {
+                Producte otroProducto = listaProductos.get(j);
+                String otraClave = otroProducto.getNom() + "-" + otroProducto.getCodiBarres();
+                if (clave.equals(otraClave)) {
+                    listaProductos.remove(j);
+                    j--;
                 }
             }
         }
@@ -112,7 +113,7 @@ public class Supermercat {
         // Muestra todos los productos que pertenecen a Alimentacio:
         if (prod.getClass().getSimpleName().equals(tipo)) {
 
-            System.out.printf("%-20s %-10d %-15.2f €\n", prod.getNom(), prod.getCantidad(), prod.getPreu());
+            System.out.printf("%-20s %-10d %-15.2f %-15.2f \n", prod.getNom(), prod.getCantidad(), prod.getPreu(), prod.getPreu() * prod.getCantidad());
 
         }
     }
@@ -120,6 +121,8 @@ public class Supermercat {
     public static void pasar_X_Caja() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dataCaducitat = LocalDate.parse("1999-11-11", formatter);
+
+        //Datos de prueba:
         for (int i = 0; i < 20; i++) {
             if (i < 5) {
                 productes.add(new Alimentacio(i + 1, "pera", 1111, dataCaducitat));
@@ -133,6 +136,8 @@ public class Supermercat {
         }
         productes.add(new Alimentacio(11, "patata", 55432, dataCaducitat));
         productes.add(new Alimentacio(11, "patata", 55432, dataCaducitat));
+        productes.add(new Textil(115, "pantalón", 55432, "Algodon"));
+
 
         //La funcion 'calcularTotal' guarda en una variable la suma total del precio de los productos almacenados en el carro
         //previamente a que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos.
@@ -144,7 +149,7 @@ public class Supermercat {
         System.out.println("SapaMercat");
         System.out.println("-------------------");
         System.out.println("Detall:");
-        System.out.printf("%-20s %-10s %-15s %s\n", "Nom", "Cantidad", "Preu unitari", "€");
+        System.out.printf("%-20s %-10s %-15s %s\n", "Nom", "Cantidad", "Preu unitari", "Preu Total");
         for (Producte prod : productes) {
             //Muestra todos los productos que pertenece a Alimentacio:
             mostrarCarro(prod, "Alimentacio");
@@ -160,7 +165,7 @@ public class Supermercat {
 
         }
         System.out.println();
-        System.out.printf("%-20s %-10s %-1s %1.2f €\n", "", "", "Total:", total);
+        System.out.printf("%-20s %-10s %-5s %-1s %1.2f €\n", "", "","", "Total a pagar:", total);
     }
 
     public static void afegirTextil() {
