@@ -1,3 +1,5 @@
+import org.w3c.dom.Text;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -111,6 +113,7 @@ public class Supermercat {
     public static void mostrarCarro(Producte prod, String tipo) {
 
         // Muestra todos los productos que pertenecen a Alimentacio:
+
         if (prod.getClass().getSimpleName().equals(tipo)) {
 
             System.out.printf("%-20s %-10d %-15.2f %-15.2f \n", prod.getNom(), prod.getCantidad(), prod.getPreu(), prod.getPreu() * prod.getCantidad());
@@ -121,24 +124,25 @@ public class Supermercat {
     public static void pasar_X_Caja() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dataCaducitat = LocalDate.parse("1999-11-11", formatter);
-
+        ArrayList<Textil> t = new ArrayList<>();
         //Datos de prueba:
         for (int i = 0; i < 20; i++) {
             if (i < 5) {
                 productes.add(new Alimentacio(i + 1, "pera", 1111, dataCaducitat));
             } else if (i >= 5 && i < 10) {
-                productes.add(new Alimentacio(i + 1, "manzana", 2222, dataCaducitat));
+                t.add(new Textil(i + 1, "ttttt", 2222, "tttttt"));
             } else if (i >= 10 && i < 15) {
-                productes.add(new Alimentacio(i + 1, "naranja", 3333, dataCaducitat));
+                t.add(new Textil(i + 1, "Ratas", 3333, "Ratas"));
             } else {
                 productes.add(new Alimentacio(i + 1, "plátano", 4444, dataCaducitat));
             }
         }
-        productes.add(new Alimentacio(11, "patata", 55432, dataCaducitat));
-        productes.add(new Alimentacio(11, "patata", 55432, dataCaducitat));
-        productes.add(new Textil(115, "pantalón", 55432, "Algodon"));
 
+        t.add(new Textil(11, "Water", 55432, "Water"));
+        t.add(new Textil(11, "vater", 55432, "vater"));
+        t.add(new Textil(115, "algodon", 55432, "algodon"));
 
+        Collections.sort(t);
         //La funcion 'calcularTotal' guarda en una variable la suma total del precio de los productos almacenados en el carro
         //previamente a que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos.
         float total = calcularTotal(productes);
@@ -150,14 +154,19 @@ public class Supermercat {
         System.out.println("-------------------");
         System.out.println("Detall:");
         System.out.printf("%-20s %-10s %-15s %s\n", "Nom", "Cantidad", "Preu unitari", "Preu Total");
+
+        System.out.println("Textil:");
+        for (Textil textil : t) {
+            mostrarCarro(textil, "Textil");
+
+        }
+        System.out.println("Alimentacio");
         for (Producte prod : productes) {
             //Muestra todos los productos que pertenece a Alimentacio:
             mostrarCarro(prod, "Alimentacio");
         }
-        for (Producte prod : productes) {
-            mostrarCarro(prod, "Textil");
 
-        }
+        System.out.println("Electronica:");
         for (Producte prod : productes) {
 
             mostrarCarro(prod, "Electronica");

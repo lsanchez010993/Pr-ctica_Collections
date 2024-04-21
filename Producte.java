@@ -1,4 +1,4 @@
-public class Producte {
+public abstract class Producte {
    private float preu;
    private String nom;
    private int codiBarres;
@@ -49,4 +49,6 @@ public class Producte {
     public void setCodiBarres(int codiBarres) {
         this.codiBarres = codiBarres;
     }
+
+
 }

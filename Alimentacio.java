@@ -28,6 +28,8 @@ public class Alimentacio extends Producte {
         return preu - (float) (preu * (1 / (diferencia + 1)) + (preu * (0.1)));
     }
 
+
+
     public LocalDate getDataCaducitat() {
         return dataCaducitat;
     }
