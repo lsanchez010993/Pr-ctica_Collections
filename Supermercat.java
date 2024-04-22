@@ -72,8 +72,8 @@ public class Supermercat {
         //Cuento la cantidad de productos repetidos por nombre y código de barras.
         //Luego utilizo el metodo getOrDefault de HashMap para contar las veces que se repiten cada producto.
         //Cada vez que se repite un producto la cantidad del mismo se incrementa en 1.
-        //Importante: En HasMap las keys deben ser unicas. Debido a eso cada vez que encuentra una repetida el metodo
-        //getOrDefault actualiz su valor.
+        //Importante: getOrDefault, de HashMap, actualiza el valor siempre que encuentra una key repetida. Debido a eso
+        // cada vez que encuentra una repetida el metodo getOrDefault actualiza su valor.
         for (Producte producto : listaProductos) {
             String clave = producto.getNom() + "-" + producto.getCodiBarres();
             int cantidad = numRepetidos.getOrDefault(clave, 0);
