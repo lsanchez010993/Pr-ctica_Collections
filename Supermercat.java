@@ -65,11 +65,11 @@ public class Supermercat {
      *
      * @param listaProductos Lista de productos pasada por parametro.
      */
-    public static void contar_Y_EliminarRepetidos(ArrayList<Producte> listaProductos) {
+    public static <T extends Producte> void contar_Y_EliminarRepetidos(List<T> listaProductos) {
         Map<String, Integer> numRepetidos = new HashMap<>();
-        HashSet<Producte> sinRepes = new HashSet<>(listaProductos);
+       
 
-        // Cuento la cantidad de productos repetidos por nombre y código de barras.
+        //Cuento la cantidad de productos repetidos por nombre y código de barras.
         //Luego utilizo el metodo getOrDefault de HashMap para contar las veces que se repiten cada producto.
         //Cada vez que se repite un producto la cantidad del mismo se incrementa en 1.
         //Importante: En HasMap las keys deben ser unicas. Debido a eso cada vez que encuentra una repetida el metodo
@@ -110,15 +110,13 @@ public class Supermercat {
         return total;
     }
 
-    public static void mostrarCarro(Producte prod, String tipo) {
+    public static void mostrarCarro(Producte prod) {
 
         // Muestra todos los productos que pertenecen a Alimentacio:
 
-        if (prod.getClass().getSimpleName().equals(tipo)) {
-
             System.out.printf("%-20s %-10d %-15.2f %-15.2f \n", prod.getNom(), prod.getCantidad(), prod.getPreu(), prod.getPreu() * prod.getCantidad());
 
-        }
+
     }
 
     public static void pasar_X_Caja() {
@@ -145,8 +143,14 @@ public class Supermercat {
         Collections.sort(t);
         //La funcion 'calcularTotal' guarda en una variable la suma total del precio de los productos almacenados en el carro
         //previamente a que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos.
+        productes.addAll(Alimentacio.getProductesAlimentacio());
+        productes.addAll(Textil.getProductesTextils());
+        productes.addAll(Electronica.getProductesElectronics());
+
         float total = calcularTotal(productes);
-        contar_Y_EliminarRepetidos(productes);
+        contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio());
+        contar_Y_EliminarRepetidos(Textil.getProductesTextils());
+        contar_Y_EliminarRepetidos(Electronica.getProductesElectronics());
         //
         System.out.println("___________________");
         System.out.println("Fecha de compra: " + LocalDate.now());
@@ -156,25 +160,25 @@ public class Supermercat {
         System.out.printf("%-20s %-10s %-15s %s\n", "Nom", "Cantidad", "Preu unitari", "Preu Total");
 
         System.out.println("Textil:");
-        for (Textil textil : t) {
-            mostrarCarro(textil, "Textil");
+        for (Textil textil : Textil.getProductesTextils()) {
+            mostrarCarro(textil);
 
         }
         System.out.println("Alimentacio");
-        for (Producte prod : productes) {
+        for (Alimentacio ali : Alimentacio.getProductesAlimentacio()) {
             //Muestra todos los productos que pertenece a Alimentacio:
-            mostrarCarro(prod, "Alimentacio");
+            mostrarCarro(ali);
         }
 
         System.out.println("Electronica:");
-        for (Producte prod : productes) {
+        for (Electronica elec : Electronica.getProductesElectronics()) {
 
-            mostrarCarro(prod, "Electronica");
+            mostrarCarro(elec);
 
 
         }
         System.out.println();
-        System.out.printf("%-20s %-10s %-5s %-1s %1.2f €\n", "", "","", "Total a pagar:", total);
+        System.out.printf("%-20s %-10s %-5s %-1s %1.2f €\n", "", "", "", "Total a pagar:", total);
     }
 
     public static void afegirTextil() {
@@ -182,7 +186,7 @@ public class Supermercat {
         String nom;
         int codiBarres;
         String composicio;
-        if (noSuperaNumMaxProd(productes)) {
+        if (noSuperaNumMaxProd()) {
             System.out.println("Textil:");
             System.out.println(" Introduce el precio:");
             preu = scan.nextFloat();
@@ -194,7 +198,7 @@ public class Supermercat {
             System.out.println(" Introduce la composicion:");
             composicio = scan.nextLine();
             scan.nextLine();
-            //Añade el producto/alimento al arrayList de textil
+            //Añade el producto al arrayList de textil
             textil.add(new Textil(preu, nom, codiBarres, composicio));
             //Luego añado el producte al array list productes.
             //En productes se encuentran todos los productos. Mediante este array compruebo el
@@ -211,7 +215,7 @@ public class Supermercat {
         String nom;
         int codiBarres;
         int dias_garantia;
-        if (noSuperaNumMaxProd(productes)) {
+        if (noSuperaNumMaxProd()) {
             System.out.println("Electronica:");
             System.out.println(" Introduce el precio:");
             preu = scan.nextFloat();
@@ -241,7 +245,7 @@ public class Supermercat {
         LocalDate dataCaducitat;
         //Mediante el array pruductes compruebo el numero de productos totales introducidos
         //En caso de que se exceda el numero de productos muestra mensaje de error.
-        if (noSuperaNumMaxProd(productes)) {
+        if (noSuperaNumMaxProd()) {
             System.out.println("Alimentacion:");
             System.out.println(" Introduce el precio:");
             preu = scan.nextFloat();
@@ -267,11 +271,13 @@ public class Supermercat {
     }
 
     /**
-     * @param p ArrayList de productos
+
      * @return Devuelve true o false en funcion del numero de productos
      */
-    public static boolean noSuperaNumMaxProd(ArrayList<Producte> p) {
-        return (p.size() <= 100);
+    public static boolean noSuperaNumMaxProd() {
+        int total = Textil.getProductesTextils().size() + Electronica.getProductesElectronics().size() +
+                Alimentacio.getProductesAlimentacio().size();
+        return (total < 10);
 
 
     }
