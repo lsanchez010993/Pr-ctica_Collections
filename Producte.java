@@ -4,12 +4,7 @@ public abstract class Producte {
    private int codiBarres;
    private int cantidad;
 
-    /**
-     * Constructor principal desde donde se gestionan los productos.
-     * @param preu
-     * @param nom
-     * @param codiBarres
-     */
+
     public Producte(float preu, String nom, int codiBarres) {
         this.preu = preu;
         this.nom = nom;

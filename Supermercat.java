@@ -221,17 +221,13 @@ public class Supermercat {
         System.out.println("-------------------");
         System.out.println("Detall:");
         System.out.printf("%-20s %-10s\n", "Nom:", "Cantidad:\n");
-        //Muestro los productos
-        for (Map.Entry<Integer, Producte> entry : hashMap.entrySet()) {
-            System.out.printf("%-20s %-10d \n", entry.getValue().getNom(), entry.getValue().getCantidad());
-        }
+        //Muestro los productos utilizando forEach con lambda expresions:
+
+        hashMap.forEach((key, value) -> System.out.printf("%-20s %-10d \n", value.getNom(), value.getCantidad()));
 
 
 
-//        for (Producte prod : productes) {
-//            mostrarCarro(prod);
-//
-//        }
+
     }
 
     public static void afegirTextil() {
