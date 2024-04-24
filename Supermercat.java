@@ -1,7 +1,4 @@
-import org.w3c.dom.Text;
-
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Supermercat {
@@ -49,7 +46,7 @@ public class Supermercat {
                 pasar_X_Caja();
                 break;
             case 3:
-
+                carroCompra();
                 break;
             default:
                 System.out.println("Introduce una opcion valida");
@@ -65,34 +62,57 @@ public class Supermercat {
      *
      * @param listaProductos Lista de productos pasada por parametro.
      */
-    public static <T extends Producte> void contar_Y_EliminarRepetidos(List<T> listaProductos) {
+    public static <T extends Producte> void contar_Y_EliminarRepetidos(List<T> listaProductos, boolean carroCompra) {
         Map<String, Integer> numRepetidos = new HashMap<>();
-       
+
 
         //Cuento la cantidad de productos repetidos por nombre y código de barras.
         //Luego utilizo el metodo getOrDefault de HashMap para contar las veces que se repiten cada producto.
         //Cada vez que se repite un producto la cantidad del mismo se incrementa en 1.
         //Importante: getOrDefault, de HashMap, actualiza el valor siempre que encuentra una key repetida. Debido a eso
         // cada vez que encuentra una repetida el metodo getOrDefault actualiza su valor.
-        for (Producte producto : listaProductos) {
-            String clave = producto.getNom() + "-" + producto.getCodiBarres();
-            int cantidad = numRepetidos.getOrDefault(clave, 0);
-            numRepetidos.put(clave, cantidad + 1);
-        }
-        //Una vez guardado el numero de veces que se repite cada producto procedo a utilizar un bucle anidado para actualizar
-        //la cantidad de veces que se repite cada producto y eliminar los repetidos.
+        if (carroCompra) {
+            for (Producte producto : listaProductos) {
+                String clave = producto.getCodiBarres() + "";
+                int cantidad = numRepetidos.getOrDefault(clave, 0);
+                numRepetidos.put(clave, cantidad + 1);
+            }
+            for (int i = 0; i < listaProductos.size(); i++) {
+                Producte producto = listaProductos.get(i);
+                String clave = producto.getCodiBarres() + "";
+                int cantidad = numRepetidos.get(clave);
+                producto.setCantidad(cantidad);
+                for (int j = i + 1; j < listaProductos.size(); j++) {
+                    Producte otroProducto = listaProductos.get(j);
+                    String otraClave = otroProducto.getCodiBarres()+"";
+                    if (clave.equals(otraClave)) {
+                        listaProductos.remove(j);
+                        j--;
+                    }
+                }
+            }
+        } else {
 
-        for (int i = 0; i < listaProductos.size(); i++) {
-            Producte producto = listaProductos.get(i);
-            String clave = producto.getNom() + "-" + producto.getCodiBarres();
-            int cantidad = numRepetidos.get(clave);
-            producto.setCantidad(cantidad);
-            for (int j = i + 1; j < listaProductos.size(); j++) {
-                Producte otroProducto = listaProductos.get(j);
-                String otraClave = otroProducto.getNom() + "-" + otroProducto.getCodiBarres();
-                if (clave.equals(otraClave)) {
-                    listaProductos.remove(j);
-                    j--;
+            for (Producte producto : listaProductos) {
+                String clave = producto.getNom() + "-" + producto.getCodiBarres();
+                int cantidad = numRepetidos.getOrDefault(clave, 0);
+                numRepetidos.put(clave, cantidad + 1);
+            }
+            //Una vez guardado el numero de veces que se repite cada producto procedo a utilizar un bucle anidado para actualizar
+            //la cantidad de veces que se repite cada producto y eliminar los repetidos.
+
+            for (int i = 0; i < listaProductos.size(); i++) {
+                Producte producto = listaProductos.get(i);
+                String clave = producto.getNom() + "-" + producto.getCodiBarres();
+                int cantidad = numRepetidos.get(clave);
+                producto.setCantidad(cantidad);
+                for (int j = i + 1; j < listaProductos.size(); j++) {
+                    Producte otroProducto = listaProductos.get(j);
+                    String otraClave = otroProducto.getNom() + "-" + otroProducto.getCodiBarres();
+                    if (clave.equals(otraClave)) {
+                        listaProductos.remove(j);
+                        j--;
+                    }
                 }
             }
         }
@@ -110,37 +130,30 @@ public class Supermercat {
         return total;
     }
 
-    public static void mostrarCarro(Producte prod) {
+    public static void mostrarTicket(Producte prod) {
 
         // Muestra todos los productos que pertenecen a Alimentacio:
 
-            System.out.printf("%-20s %-10d %-15.2f %-15.2f \n", prod.getNom(), prod.getCantidad(), prod.getPreu(), prod.getPreu() * prod.getCantidad());
+        System.out.printf("%-20s %-10d %-15.2f %-15.2f \n", prod.getNom(), prod.getCantidad(), prod.getPreu(), prod.getPreu() * prod.getCantidad());
 
+
+    }
+//    public static HashMap<Integer, Producte> mostrarCarro(HashMap<Integer, Producte> map) {
+//
+//
+//        System.out.printf("%-20s %-10d  \n", prod.getNom(), prod.getCantidad());
+//        System.out.println("Clave: " + map.getKey() + ", Valor: " + entry.getValue());
+//
+//
+//    }
+
+    public static void vaciarCarro() {
+        productes.clear();
 
     }
 
     public static void pasar_X_Caja() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate dataCaducitat = LocalDate.parse("1999-11-11", formatter);
-        ArrayList<Textil> t = new ArrayList<>();
-        //Datos de prueba:
-        for (int i = 0; i < 20; i++) {
-            if (i < 5) {
-                productes.add(new Alimentacio(i + 1, "pera", 1111, dataCaducitat));
-            } else if (i >= 5 && i < 10) {
-                t.add(new Textil(i + 1, "ttttt", 2222, "tttttt"));
-            } else if (i >= 10 && i < 15) {
-                t.add(new Textil(i + 1, "Ratas", 3333, "Ratas"));
-            } else {
-                productes.add(new Alimentacio(i + 1, "plátano", 4444, dataCaducitat));
-            }
-        }
 
-        t.add(new Textil(11, "Water", 55432, "Water"));
-        t.add(new Textil(11, "vater", 55432, "vater"));
-        t.add(new Textil(115, "algodon", 55432, "algodon"));
-
-        Collections.sort(t);
         //La funcion 'calcularTotal' guarda en una variable la suma total del precio de los productos almacenados en el carro
         //previamente a que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos.
         productes.addAll(Alimentacio.getProductesAlimentacio());
@@ -148,9 +161,10 @@ public class Supermercat {
         productes.addAll(Electronica.getProductesElectronics());
 
         float total = calcularTotal(productes);
-        contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio());
-        contar_Y_EliminarRepetidos(Textil.getProductesTextils());
-        contar_Y_EliminarRepetidos(Electronica.getProductesElectronics());
+        contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio(),false);
+        contar_Y_EliminarRepetidos(Textil.getProductesTextils(),false);
+        contar_Y_EliminarRepetidos(Electronica.getProductesElectronics(),false);
+
         //
         System.out.println("___________________");
         System.out.println("Fecha de compra: " + LocalDate.now());
@@ -161,24 +175,63 @@ public class Supermercat {
 
         System.out.println("Textil:");
         for (Textil textil : Textil.getProductesTextils()) {
-            mostrarCarro(textil);
+            mostrarTicket(textil);
 
         }
         System.out.println("Alimentacio");
         for (Alimentacio ali : Alimentacio.getProductesAlimentacio()) {
             //Muestra todos los productos que pertenece a Alimentacio:
-            mostrarCarro(ali);
+            mostrarTicket(ali);
         }
 
         System.out.println("Electronica:");
         for (Electronica elec : Electronica.getProductesElectronics()) {
 
-            mostrarCarro(elec);
+            mostrarTicket(elec);
 
 
         }
         System.out.println();
         System.out.printf("%-20s %-10s %-5s %-1s %1.2f €\n", "", "", "", "Total a pagar:", total);
+
+
+        vaciarCarro();
+
+    }
+
+    public static void carroCompra() {
+
+
+        contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio(),true);
+        contar_Y_EliminarRepetidos(Textil.getProductesTextils(),true);
+        contar_Y_EliminarRepetidos(Electronica.getProductesElectronics(),true);
+
+        productes.addAll(Alimentacio.getProductesAlimentacio());
+        productes.addAll(Textil.getProductesTextils());
+        productes.addAll(Electronica.getProductesElectronics());
+        //creo el HashMap.
+        HashMap<Integer, Producte> hashMap = new HashMap<>();
+        //Añado al HashMap los productos que hay en la lista
+        for (int i = 0; i < productes.size(); i++) {
+            hashMap.put(i, productes.get(i));
+        }
+
+        System.out.println("___________________");
+        System.out.println("Productes");
+        System.out.println("-------------------");
+        System.out.println("Detall:");
+        System.out.printf("%-20s %-10s\n", "Nom:", "Cantidad:\n");
+        //Muestro los productos
+        for (Map.Entry<Integer, Producte> entry : hashMap.entrySet()) {
+            System.out.printf("%-20s %-10d \n", entry.getValue().getNom(), entry.getValue().getCantidad());
+        }
+
+
+
+//        for (Producte prod : productes) {
+//            mostrarCarro(prod);
+//
+//        }
     }
 
     public static void afegirTextil() {
@@ -271,7 +324,6 @@ public class Supermercat {
     }
 
     /**
-
      * @return Devuelve true o false en funcion del numero de productos
      */
     public static boolean noSuperaNumMaxProd() {
