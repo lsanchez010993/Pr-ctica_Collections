@@ -1,9 +1,10 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
-public class Alimentacio extends Producte {
+public class Alimentacio extends Producte implements Comparator<Alimentacio> {
     private LocalDate dataCaducitat;
     private static List<Alimentacio> productesAlimentacio = new ArrayList<>();
 
@@ -36,5 +37,10 @@ public class Alimentacio extends Producte {
 
     public LocalDate getDataCaducitat() {
         return dataCaducitat;
+    }
+
+    @Override
+    public int compare(Alimentacio o1, Alimentacio o2) {
+        return 0;
     }
 }

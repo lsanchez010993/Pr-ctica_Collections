@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Supermercat {
     public static ArrayList<Producte> productes = new ArrayList<>();
@@ -47,7 +48,10 @@ public class Supermercat {
                 break;
             case 3:
                 carroCompra();
+                buscarNomPerCodiBarres();
                 break;
+            case 4:
+
             default:
                 System.out.println("Introduce una opcion valida");
         }
@@ -65,58 +69,29 @@ public class Supermercat {
     public static <T extends Producte> void contar_Y_EliminarRepetidos(List<T> listaProductos, boolean carroCompra) {
         Map<String, Integer> numRepetidos = new HashMap<>();
 
+        // Cuento la cantidad de productos repetidos por clave utilizando un operador ternario.
+        for (Producte producto : listaProductos) {
+            String clave = carroCompra ? String.valueOf(producto.getCodiBarres()) : producto.getNom() + "-" + producto.getCodiBarres();
+            numRepetidos.put(clave, numRepetidos.getOrDefault(clave, 0) + 1);
+        }
 
-        //Cuento la cantidad de productos repetidos por nombre y código de barras.
-        //Luego utilizo el metodo getOrDefault de HashMap para contar las veces que se repiten cada producto.
-        //Cada vez que se repite un producto la cantidad del mismo se incrementa en 1.
-        //Importante: getOrDefault, de HashMap, actualiza el valor siempre que encuentra una key repetida. Debido a eso
-        // cada vez que encuentra una repetida el metodo getOrDefault actualiza su valor.
-        if (carroCompra) {
-            for (Producte producto : listaProductos) {
-                String clave = producto.getCodiBarres() + "";
-                int cantidad = numRepetidos.getOrDefault(clave, 0);
-                numRepetidos.put(clave, cantidad + 1);
-            }
-            for (int i = 0; i < listaProductos.size(); i++) {
-                Producte producto = listaProductos.get(i);
-                String clave = producto.getCodiBarres() + "";
-                int cantidad = numRepetidos.get(clave);
-                producto.setCantidad(cantidad);
-                for (int j = i + 1; j < listaProductos.size(); j++) {
-                    Producte otroProducto = listaProductos.get(j);
-                    String otraClave = otroProducto.getCodiBarres()+"";
-                    if (clave.equals(otraClave)) {
-                        listaProductos.remove(j);
-                        j--;
-                    }
-                }
-            }
-        } else {
-
-            for (Producte producto : listaProductos) {
-                String clave = producto.getNom() + "-" + producto.getCodiBarres();
-                int cantidad = numRepetidos.getOrDefault(clave, 0);
-                numRepetidos.put(clave, cantidad + 1);
-            }
-            //Una vez guardado el numero de veces que se repite cada producto procedo a utilizar un bucle anidado para actualizar
-            //la cantidad de veces que se repite cada producto y eliminar los repetidos.
-
-            for (int i = 0; i < listaProductos.size(); i++) {
-                Producte producto = listaProductos.get(i);
-                String clave = producto.getNom() + "-" + producto.getCodiBarres();
-                int cantidad = numRepetidos.get(clave);
-                producto.setCantidad(cantidad);
-                for (int j = i + 1; j < listaProductos.size(); j++) {
-                    Producte otroProducto = listaProductos.get(j);
-                    String otraClave = otroProducto.getNom() + "-" + otroProducto.getCodiBarres();
-                    if (clave.equals(otraClave)) {
-                        listaProductos.remove(j);
-                        j--;
-                    }
+        // Actualizo la cantidad de productos y elimino los repetidos utilizando un operador ternario.
+        for (int i = 0; i < listaProductos.size(); i++) {
+            Producte producto = listaProductos.get(i);
+            String clave = carroCompra ? String.valueOf(producto.getCodiBarres()) : producto.getNom() + "-" + producto.getCodiBarres();
+            int cantidad = numRepetidos.get(clave);
+            producto.setCantidad(cantidad);
+            for (int j = i + 1; j < listaProductos.size(); j++) {
+                Producte otroProducto = listaProductos.get(j);
+                String otraClave = carroCompra ? String.valueOf(otroProducto.getCodiBarres()) : otroProducto.getNom() + "-" + otroProducto.getCodiBarres();
+                if (clave.equals(otraClave)) {
+                    listaProductos.remove(j);
+                    j--;
                 }
             }
         }
     }
+
 
     /**
      * @param listaProductos Lista de productos almacenas en arrayList
@@ -138,14 +113,7 @@ public class Supermercat {
 
 
     }
-//    public static HashMap<Integer, Producte> mostrarCarro(HashMap<Integer, Producte> map) {
-//
-//
-//        System.out.printf("%-20s %-10d  \n", prod.getNom(), prod.getCantidad());
-//        System.out.println("Clave: " + map.getKey() + ", Valor: " + entry.getValue());
-//
-//
-//    }
+
 
     public static void vaciarCarro() {
         productes.clear();
@@ -161,9 +129,9 @@ public class Supermercat {
         productes.addAll(Electronica.getProductesElectronics());
 
         float total = calcularTotal(productes);
-        contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio(),false);
-        contar_Y_EliminarRepetidos(Textil.getProductesTextils(),false);
-        contar_Y_EliminarRepetidos(Electronica.getProductesElectronics(),false);
+        contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio(), false);
+        contar_Y_EliminarRepetidos(Textil.getProductesTextils(), false);
+        contar_Y_EliminarRepetidos(Electronica.getProductesElectronics(), false);
 
         //
         System.out.println("___________________");
@@ -199,12 +167,28 @@ public class Supermercat {
 
     }
 
+    /**
+     * Funcion que implementa la clase Stream. Permite buscar el nombre de un objeto a partir del codigo de barras
+     */
+    public static void buscarNomPerCodiBarres() {
+        int codigoBarras;
+        System.out.println("Introduce el codigo de barras para buscar el nombre de un producto:");
+        codigoBarras = scan.nextInt();
+        Stream<Producte> listaProductes = productes.stream();
+        String nom = listaProductes
+                .filter(producto -> producto.getCodiBarres() == codigoBarras)
+                .map(Producte::getNom)
+                .findFirst()
+                .orElse("Producto no encontrado");
+        System.out.println(nom);
+    }
+
     public static void carroCompra() {
 
 
-        contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio(),true);
-        contar_Y_EliminarRepetidos(Textil.getProductesTextils(),true);
-        contar_Y_EliminarRepetidos(Electronica.getProductesElectronics(),true);
+        contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio(), true);
+        contar_Y_EliminarRepetidos(Textil.getProductesTextils(), true);
+        contar_Y_EliminarRepetidos(Electronica.getProductesElectronics(), true);
 
         productes.addAll(Alimentacio.getProductesAlimentacio());
         productes.addAll(Textil.getProductesTextils());
@@ -221,11 +205,9 @@ public class Supermercat {
         System.out.println("-------------------");
         System.out.println("Detall:");
         System.out.printf("%-20s %-10s\n", "Nom:", "Cantidad:\n");
+
         //Muestro los productos utilizando forEach con lambda expresions:
-
         hashMap.forEach((key, value) -> System.out.printf("%-20s %-10d \n", value.getNom(), value.getCantidad()));
-
-
 
 
     }

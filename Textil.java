@@ -15,6 +15,8 @@ public class Textil extends Producte implements Comparable<Textil>{
         return composicio;
     }
 
+
+
     public void setComposicio(String composicio) {
         this.composicio = composicio;
     }
