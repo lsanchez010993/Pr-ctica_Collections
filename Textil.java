@@ -7,6 +7,7 @@ public class Textil extends Producte implements Comparable<Textil>{
     private static List<Textil> productesTextils= new ArrayList<>();
     public Textil(float preu, String nom, int codiBarres, String composicio) {
         super(preu, nom, codiBarres);
+        if (!cumpleLongitudRequerida(nom)) throw new IllegalArgumentException("La longitud máxima del nombre debe de ser de 15 caracteres.");
         this.composicio = composicio;
         //Si el codigo de barras está repetido, no lo añade a la lista.
         if (!codigoBarrasRepetido(codiBarres)) {
@@ -37,5 +38,8 @@ public class Textil extends Producte implements Comparable<Textil>{
 
     }
     return false;
+    }
+    private boolean cumpleLongitudRequerida(String nom){
+        return  getNom().length()<=15;
     }
 }

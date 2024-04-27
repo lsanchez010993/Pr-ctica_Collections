@@ -150,6 +150,8 @@ public class Supermercat {
         System.out.printf("%-20s %-10s %-15s %s\n", "Nom", "Cantidad", "Preu unitari", "Preu Total");
 
         System.out.println("Textil:");
+        //Ordeno del productos textiles por composicion
+        Collections.sort(Textil.getProductesTextils());
         for (Textil textil : Textil.getProductesTextils()) {
             mostrarTicket(textil);
 
@@ -248,10 +250,12 @@ public class Supermercat {
         contar_Y_EliminarRepetidos(Alimentacio.getProductesAlimentacio(), true);
         contar_Y_EliminarRepetidos(Textil.getProductesTextils(), true);
         contar_Y_EliminarRepetidos(Electronica.getProductesElectronics(), true);
-
+        //Ordeno del productos textiles por composicion
+        Collections.sort(Textil.getProductesTextils());
         productes.addAll(Alimentacio.getProductesAlimentacio());
         productes.addAll(Textil.getProductesTextils());
         productes.addAll(Electronica.getProductesElectronics());
+
         //creo el HashMap.
         HashMap<Integer, Producte> hashMap = new HashMap<>();
         //Añado al HashMap los productos que hay en la lista
@@ -272,94 +276,121 @@ public class Supermercat {
     }
 
     public static void afegirTextil() {
-        float preu;
-        String nom;
-        int codiBarres;
-        String composicio;
-        if (noSuperaNumMaxProd()) {
-            System.out.println("Textil:");
-            System.out.println(" Introduce el precio:");
-            preu = scan.nextFloat();
-            System.out.println(" Introduce el nombre:");
-            nom = scan.nextLine();
-            scan.nextLine();
-            System.out.println(" Introduce el codigo de barras:");
-            codiBarres = scan.nextInt();
-            System.out.println(" Introduce la composicion:");
-            composicio = scan.nextLine();
-            scan.nextLine();
-            //Añade el producto al arrayList de textil
-            textil.add(new Textil(preu, nom, codiBarres, composicio));
-            //Luego añado el producte al array list productes.
-            //En productes se encuentran todos los productos. Mediante este array compruebo el
-            //numero de productos introducidos
-            productes.add(new Textil(preu, nom, codiBarres, composicio));
-        } else
-            System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
-
-
+        float preu = 0;
+        String nom = "";
+        int codiBarres = 0;
+        String composicio = "";
+        try {
+            if (noSuperaNumMaxProd()) {
+                System.out.println("Textil:");
+                System.out.println(" Introduce el precio:");
+                preu = scan.nextFloat();
+                System.out.println(" Introduce el nombre:");
+                nom = scan.nextLine();
+                scan.nextLine();
+                System.out.println(" Introduce el codigo de barras:");
+                codiBarres = scan.nextInt();
+                System.out.println(" Introduce la composicion:");
+                composicio = scan.nextLine();
+                scan.nextLine();
+                //Añade el producto al arrayList de textil
+                textil.add(new Textil(preu, nom, codiBarres, composicio));
+                //Luego añado el producte al array list productes.
+                //En productes se encuentran todos los productos. Mediante este array compruebo el
+                //numero de productos introducidos
+                productes.add(new Textil(preu, nom, codiBarres, composicio));
+            } else {
+                System.out.println("Se ha alcanzado el número máximo de productos que se pueden introducir. Pasa por caja");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Entrada inválida. Por favor, asegúrate de ingresar un número válido para el precio y el código de barras.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            // Cerrar el Scanner en el bloque finally
+            if (scan != null) {
+                scan.close();
+            }
+        }
     }
 
     public static void afegirElectronica() {
-        float preu;
-        String nom;
-        int codiBarres;
-        int dias_garantia;
-        if (noSuperaNumMaxProd()) {
-            System.out.println("Electronica:");
-            System.out.println(" Introduce el precio:");
-            preu = scan.nextFloat();
-            System.out.println(" Introduce el nombre:");
-            nom = scan.nextLine();
-            scan.nextLine();
-            System.out.println(" Introduce el codigo de barras:");
-            codiBarres = scan.nextInt();
-            System.out.println(" Introduce los días de garantia:");
-            dias_garantia = scan.nextInt();
-            //Añade el producto/alimento al arrayList de electronica
-            electronica.add(new Electronica(preu, nom, codiBarres, dias_garantia));
-            //Luego añado el producte al array list productes.
-            //En productes se encuentran todos los productos. Mediante este array compruebo el
-            //numero de productos introducidos
-            productes.add(new Electronica(preu, nom, codiBarres, dias_garantia));
-        } else
-            System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
-
-
+        float preu = 0;
+        String nom = "";
+        int codiBarres = 0;
+        int dias_garantia = 0;
+        try {
+            if (noSuperaNumMaxProd()) {
+                System.out.println("Electronica:");
+                System.out.println(" Introduce el precio:");
+                preu = scan.nextFloat();
+                System.out.println(" Introduce el nombre:");
+                nom = scan.nextLine();
+                scan.nextLine();
+                System.out.println(" Introduce el codigo de barras:");
+                codiBarres = scan.nextInt();
+                System.out.println(" Introduce los días de garantia:");
+                dias_garantia = scan.nextInt();
+                //Añade el producto/alimento al arrayList de electronica
+                electronica.add(new Electronica(preu, nom, codiBarres, dias_garantia));
+                //Luego añado el producte al array list productes.
+                //En productes se encuentran todos los productos. Mediante este array compruebo el
+                //numero de productos introducidos
+                productes.add(new Electronica(preu, nom, codiBarres, dias_garantia));
+            } else {
+                System.out.println("Se ha alcanzado el número máximo de productos que se pueden introducir. Pasa por caja");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Entrada inválida. Por favor, asegúrate de ingresar un número válido para el precio, código de barras y los días de garantía.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            // Cerrar el Scanner en el bloque finally
+            if (scan != null) {
+                scan.close();
+            }
+        }
     }
 
     public static void afegirAliment() {
-        float preu;
-        String nom;
-        int codiBarres;
-        LocalDate dataCaducitat;
-        //Mediante el array pruductes compruebo el numero de productos totales introducidos
-        //En caso de que se exceda el numero de productos muestra mensaje de error.
-        if (noSuperaNumMaxProd()) {
-            System.out.println("Alimentacion:");
-            System.out.println(" Introduce el precio:");
-            preu = scan.nextFloat();
-            scan.nextLine();
-            System.out.println(" Introduce el nombre:");
-            nom = scan.nextLine();
+        float preu = 0;
+        String nom = "";
+        int codiBarres = 0;
+        LocalDate dataCaducitat = null;
+        try {
+            if (noSuperaNumMaxProd()) {
+                System.out.println("Alimentacion:");
+                System.out.println(" Introduce el precio:");
+                preu = scan.nextFloat();
+                scan.nextLine();
+                System.out.println(" Introduce el nombre:");
+                nom = scan.nextLine();
+                System.out.println(" Introduce el codigo de barras:");
+                codiBarres = scan.nextInt();
+                scan.nextLine();
+                System.out.println(" Introduce la fecha de caducidad (aaaa-MM-dd):");
+                dataCaducitat = LocalDate.parse(scan.nextLine());
 
-            System.out.println(" Introduce el codigo de barras:");
-            codiBarres = scan.nextInt();
-            scan.nextLine();
-            System.out.println(" Introduce la fecha de caducidad (aaaa-MM-dd):");
-            dataCaducitat = LocalDate.parse(scan.nextLine());
-
-            //Añade el producto/alimento al arrayList de alimentacio
-            alimentacio.add(new Alimentacio(preu, nom, codiBarres, dataCaducitat));
-            //Luego añado el producte al array list productes.
-            //En productes se encuentran todos los productos. Mediante este array compruebo el
-            //numero de productos introducidos
-            productes.add(new Alimentacio(preu, nom, codiBarres, dataCaducitat));
-
-        } else
-            System.out.println("Se ha alcanzado el numero maximo de productos que se pueden introducir. Pasa por caja");
+                //Añade el producto/alimento al arrayList de alimentacio
+                alimentacio.add(new Alimentacio(preu, nom, codiBarres, dataCaducitat));
+                //Luego añado el producte al array list productes.
+                //En productes se encuentran todos los productos. Mediante este array compruebo el
+                //numero de productos introducidos
+                productes.add(new Alimentacio(preu, nom, codiBarres, dataCaducitat));
+            } else {
+                System.out.println("Se ha alcanzado el número máximo de productos que se pueden introducir. Pasa por caja");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Entrada inválida. Por favor, asegúrate de ingresar un número válido para el precio y el código de barras, y una fecha de caducidad en el formato correcto (aaaa-MM-dd).");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            // Cerrar el Scanner en el bloque finally
+            if (scan != null) {
+                scan.close();
+            }
+        }
     }
-
     /**
      * @return Devuelve true o false en funcion del numero de productos
      */

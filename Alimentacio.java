@@ -12,6 +12,7 @@ public class Alimentacio extends Producte implements Comparator<Alimentacio> {
 
     public Alimentacio(float preu, String nom, int codiBarres, LocalDate data) {
         super(preu, nom, codiBarres);
+        if (!cumpleLongitudRequerida(nom)) throw new IllegalArgumentException("La longitud máxima del nombre debe de ser de 15 caracteres.");
         this.dataCaducitat = data;
         productesAlimentacio.add(this);
 
@@ -42,5 +43,8 @@ public class Alimentacio extends Producte implements Comparator<Alimentacio> {
     @Override
     public int compare(Alimentacio o1, Alimentacio o2) {
         return 0;
+    }
+    private boolean cumpleLongitudRequerida(String nom){
+        return  getNom().length()<=15;
     }
 }

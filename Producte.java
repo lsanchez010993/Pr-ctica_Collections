@@ -1,21 +1,22 @@
 public abstract class Producte {
-   private float preu;
-   private String nom;
-   private int codiBarres;
-   private int cantidad;
+    private float preu;
+    private String nom;
+    private int codiBarres;
+    private int cantidad;
 
 
-    public Producte(float preu, String nom, int codiBarres) {
+    public Producte(float preu, String nom, int codiBarres) throws IllegalArgumentException {
         this.preu = preu;
         this.nom = nom;
         this.codiBarres = codiBarres;
-        this.cantidad=1;
+        this.cantidad = 1;
     }
 
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
     public void setPreu(int preu) {
         this.preu = preu;
     }
