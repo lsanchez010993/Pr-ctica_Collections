@@ -13,9 +13,9 @@ public class Main {
             if (i < 5) {
                new Alimentacio(i + 1, "pera", 1411, dataCaducitat);
             } else if (i >= 5 && i < 10) {
-                new Textil(i + 1, "ttttt", 2922, "tttttt");
+                new Textil(i + 1, "ttttt", 1234, "tttttt");
             } else if (i >= 10 && i < 15) {
-                new Textil(i + 1, "Ratas", 2522, "Ratas");
+                new Textil(i + 1, "Ratas", 1238, "Ratas");
             } else {
                new Alimentacio(i + 1, "plátano", 4404, dataCaducitat);
             }

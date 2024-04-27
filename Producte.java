@@ -16,10 +16,14 @@ public abstract class Producte {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+    public void setPreu(int preu) {
+        this.preu = preu;
+    }
 
     public int getCantidad() {
         return cantidad;
     }
+
 
     public float getPreu() {
         return preu;

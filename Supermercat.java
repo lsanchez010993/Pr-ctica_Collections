@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -52,6 +51,7 @@ public class Supermercat {
                 break;
 
             case 2:
+                leerArchivo("UpdateTextilPrices.dat");
                 pasar_X_Caja();
                 break;
             case 3:
@@ -191,33 +191,54 @@ public class Supermercat {
         System.out.println(nom);
     }
 
-    public static void leerArchivo(String nomArchivo) {
-        String rutaArchivo = "./updates/UpdateTextilPrices.dat";
-
-        try {
-            // Crear un objeto File con la ruta del archivo
-            File file = new File(rutaArchivo);
-
-            // Verificar si el archivo existe
-            if (file.exists()) {
-                // Abrir un flujo de entrada desde el archivo
-                FileInputStream inputStream = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                // Leer el contenido del archivo línea por línea
-                String linea;
-                while ((linea = reader.readLine()) != null) {
-                    // Procesar cada línea como sea necesario
-                    System.out.println(linea);
-                }
-
-                // Cerrar el flujo de entrada
-                reader.close();
-            } else {
-                System.out.println("El archivo no existe.");
+    public static void buscarCodBarrasYActualizarPrecio(Map<Integer, Float> codiPreuMap) {
+        for (Textil textil1 : Textil.getProductesTextils()) {
+            // Verificar si el código de barras del producto está en el HashMap
+            if (codiPreuMap.containsKey(textil1.getCodiBarres())) {
+                // Obtener el precio del producto del HashMap y asignarlo a Textil
+                float precio = codiPreuMap.get(textil1.getCodiBarres());
+                textil1.setPreu(precio);
             }
+        }
+    }
+
+    public static void leerArchivo(String nomArchivo) {
+        String rutaArchivo = "./updates/" + nomArchivo;
+        Map<Integer, Float> codiPreuMap = new HashMap<>();
+        FileInputStream inputStream = null;
+        BufferedReader reader = null;
+        try {
+            File file = new File(rutaArchivo);
+            if (file.exists()) {
+                inputStream = new FileInputStream(file);
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String linea;
+                int contador = 0;
+                while ((linea = reader.readLine()) != null) {
+                    contador++;
+                    if (contador == 1) continue;
+                    String[] lineaProducto = linea.split(", ");
+                    //Guardo los datos leidos en un Map donde cada codigo de barras unico tiene un precio.
+                    codiPreuMap.put(Integer.parseInt(lineaProducto[0]), Float.parseFloat(lineaProducto[1]));
+                }
+            }
+            //Funcion que que compara el codigo de barras de todos los productos introducidos en la lista textil.
+            //Si encuentra una coincidencia, actualiza el precio del producto
+            buscarCodBarrasYActualizarPrecio(codiPreuMap);
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
+        } finally {
+            // Cierro los objetos de lectura en el bloque finally
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                System.out.println("Error al cerrar el flujo de lectura: " + e.getMessage());
+            }
         }
     }
 
