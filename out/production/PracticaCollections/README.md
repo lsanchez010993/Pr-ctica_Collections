@@ -14,4 +14,3 @@ Nota: La razón por la que no he utilizado HasSet para eliminar repetidos se deb
 para saber la cantidad.
 Añado una variable booleana como parametro de entrada al metodo 'contar_Y_EliminarRepetidos' para reutilizarla en otras 
 partes del programa  
-Creo la funcion 'buscarNomPerCodiBarres' implementando la clase stream

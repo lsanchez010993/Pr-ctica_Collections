@@ -13,4 +13,6 @@ eliminando repedidos.
 Nota: La razón por la que no he utilizado HasSet para eliminar repetidos se debe a que previamente he tenido que contarlos
 para saber la cantidad.
 Añado una variable booleana como parametro de entrada al metodo 'contar_Y_EliminarRepetidos' para reutilizarla en otras 
-partes del programa  
+partes del programa.
+En la clase textil incorporo el metodo booleano 'codigoBarrasRepetido' para comprobar si el codigo de barras de algun producto esta repetido. En caso de que este repetido este no se añade a la lista.
+Incorporo en la clase supermercat la funcion 'buscarNomPerCodiBarres' que utiliza los streams y expresiones lambda para buscar el nombre de los productos por codigo de barras.
