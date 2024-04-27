@@ -1,6 +1,14 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Stream;
+import java.io.BufferedReader;
+
+import java.io.InputStreamReader;
+
 
 public class Supermercat {
     public static ArrayList<Producte> productes = new ArrayList<>();
@@ -181,6 +189,36 @@ public class Supermercat {
                 .findFirst()
                 .orElse("Producto no encontrado");
         System.out.println(nom);
+    }
+
+    public static void leerArchivo(String nomArchivo) {
+        String rutaArchivo = "./updates/UpdateTextilPrices.dat";
+
+        try {
+            // Crear un objeto File con la ruta del archivo
+            File file = new File(rutaArchivo);
+
+            // Verificar si el archivo existe
+            if (file.exists()) {
+                // Abrir un flujo de entrada desde el archivo
+                FileInputStream inputStream = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                // Leer el contenido del archivo línea por línea
+                String linea;
+                while ((linea = reader.readLine()) != null) {
+                    // Procesar cada línea como sea necesario
+                    System.out.println(linea);
+                }
+
+                // Cerrar el flujo de entrada
+                reader.close();
+            } else {
+                System.out.println("El archivo no existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
     }
 
     public static void carroCompra() {
