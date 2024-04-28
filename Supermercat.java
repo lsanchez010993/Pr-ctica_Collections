@@ -239,7 +239,7 @@ public class Supermercat {
                     inputStream.close();
                 }
             } catch (IOException e) {
-                System.out.println("Error al cerrar el flujo de lectura: " + e.getMessage());
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
@@ -276,10 +276,10 @@ public class Supermercat {
     }
 
     public static void afegirTextil() {
-        float preu = 0;
-        String nom = "";
-        int codiBarres = 0;
-        String composicio = "";
+        float preu;
+        String nom;
+        int codiBarres;
+        String composicio;
         try {
             if (noSuperaNumMaxProd()) {
                 System.out.println("Textil:");
@@ -293,7 +293,7 @@ public class Supermercat {
                 System.out.println(" Introduce la composicion:");
                 composicio = scan.nextLine();
                 scan.nextLine();
-                //Añade el producto al arrayList de textil
+                //Añado el producto al arrayList de textil
                 textil.add(new Textil(preu, nom, codiBarres, composicio));
                 //Luego añado el producte al array list productes.
                 //En productes se encuentran todos los productos. Mediante este array compruebo el
@@ -303,11 +303,11 @@ public class Supermercat {
                 System.out.println("Se ha alcanzado el número máximo de productos que se pueden introducir. Pasa por caja");
             }
         } catch (InputMismatchException e) {
-            System.out.println("Error: Entrada inválida. Por favor, asegúrate de ingresar un número válido para el precio y el código de barras.");
+            System.out.println("Error: Entrada inválida. Ingresa un número válido para el precio y el código de barras.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
-            // Cerrar el Scanner en el bloque finally
+            // Cierro el Scanner en el bloque finally
             if (scan != null) {
                 scan.close();
             }
@@ -331,7 +331,7 @@ public class Supermercat {
                 codiBarres = scan.nextInt();
                 System.out.println(" Introduce los días de garantia:");
                 dias_garantia = scan.nextInt();
-                //Añade el producto/alimento al arrayList de electronica
+                //Añado el producto/alimento al arrayList de electronica
                 electronica.add(new Electronica(preu, nom, codiBarres, dias_garantia));
                 //Luego añado el producte al array list productes.
                 //En productes se encuentran todos los productos. Mediante este array compruebo el
@@ -341,11 +341,11 @@ public class Supermercat {
                 System.out.println("Se ha alcanzado el número máximo de productos que se pueden introducir. Pasa por caja");
             }
         } catch (InputMismatchException e) {
-            System.out.println("Error: Entrada inválida. Por favor, asegúrate de ingresar un número válido para el precio, código de barras y los días de garantía.");
+            System.out.println("Error: Entrada inválida. Ingresa un número válido para el precio, código de barras y los días de garantía.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
-            // Cerrar el Scanner en el bloque finally
+            // Cierro el Scanner en el bloque finally
             if (scan != null) {
                 scan.close();
             }
@@ -371,7 +371,7 @@ public class Supermercat {
                 System.out.println(" Introduce la fecha de caducidad (aaaa-MM-dd):");
                 dataCaducitat = LocalDate.parse(scan.nextLine());
 
-                //Añade el producto/alimento al arrayList de alimentacio
+                //Añado el producto/alimento al arrayList de alimentacio
                 alimentacio.add(new Alimentacio(preu, nom, codiBarres, dataCaducitat));
                 //Luego añado el producte al array list productes.
                 //En productes se encuentran todos los productos. Mediante este array compruebo el
@@ -381,11 +381,11 @@ public class Supermercat {
                 System.out.println("Se ha alcanzado el número máximo de productos que se pueden introducir. Pasa por caja");
             }
         } catch (InputMismatchException e) {
-            System.out.println("Error: Entrada inválida. Por favor, asegúrate de ingresar un número válido para el precio y el código de barras, y una fecha de caducidad en el formato correcto (aaaa-MM-dd).");
+            System.out.println("Error: Entrada inválida. Asegúrate de ingresar un número válido para el precio y el código de barras, y una fecha de caducidad en el formato correcto (aaaa-MM-dd).");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
-            // Cerrar el Scanner en el bloque finally
+            // Cierro el Scanner en el bloque finally
             if (scan != null) {
                 scan.close();
             }
