@@ -114,24 +114,23 @@ public class Supermercat {
     }
 
     public static void mostrarTicket(Producte prod) {
-
-        // Muestra todos los productos que pertenecen a Alimentacio:
-
         System.out.printf("%-20s %-10d %-15.2f %-15.2f \n", prod.getNom(), prod.getCantidad(), prod.getPreu(), prod.getPreu() * prod.getCantidad());
-
-
     }
 
 
     public static void vaciarCarro() {
         productes.clear();
+        Textil.getProductesTextils().clear();
+        Alimentacio.getProductesAlimentacio().clear();
+        Electronica.getProductesElectronics().clear();
 
     }
 
     public static void pasar_X_Caja() {
 
-        //La funcion 'calcularTotal' guarda en una variable la suma total del precio de los productos almacenados en el carro
-        //previamente a que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos.
+        //Previamente a que la funcion 'contar_Y_EliminarRepetidos' cuente y elimine los productos repetidos,
+        // la funcion 'calcularTotal' guarda en una variable la suma total del precio de los productos almacenados en el carro.
+
         productes.addAll(Alimentacio.getProductesAlimentacio());
         productes.addAll(Textil.getProductesTextils());
         productes.addAll(Electronica.getProductesElectronics());
@@ -141,7 +140,7 @@ public class Supermercat {
         contar_Y_EliminarRepetidos(Textil.getProductesTextils(), false);
         contar_Y_EliminarRepetidos(Electronica.getProductesElectronics(), false);
 
-        //
+
         System.out.println("___________________");
         System.out.println("Fecha de compra: " + LocalDate.now());
         System.out.println("SapaMercat");
@@ -172,7 +171,7 @@ public class Supermercat {
         System.out.println();
         System.out.printf("%-20s %-10s %-5s %-1s %1.2f €\n", "", "", "", "Total a pagar:", total);
 
-
+        //Vacio el carro.
         vaciarCarro();
 
     }
@@ -193,11 +192,16 @@ public class Supermercat {
         System.out.println(nom);
     }
 
+    /**
+     *     Funcion que que compara el codigo de barras de todos los productos introducidos en la lista textil.
+     *   Si encuentra una coincidencia, actualiza el precio del producto
+     * @param codiPreuMap Objeto hashMap donde esta guardado el codigo de barras y el precio.
+     */
     public static void buscarCodBarrasYActualizarPrecio(Map<Integer, Float> codiPreuMap) {
         for (Textil textil1 : Textil.getProductesTextils()) {
-            // Verificar si el código de barras del producto está en el HashMap
+            // Verifico si el código de barras del producto está en el HashMap
             if (codiPreuMap.containsKey(textil1.getCodiBarres())) {
-                // Obtener el precio del producto del HashMap y asignarlo a Textil
+                // Obtengo el precio del producto del HashMap y lo asigno a Textil
                 float precio = codiPreuMap.get(textil1.getCodiBarres());
                 textil1.setPreu(precio);
             }
@@ -269,7 +273,7 @@ public class Supermercat {
         System.out.println("Detall:");
         System.out.printf("%-20s %-10s\n", "Nom:", "Cantidad:\n");
 
-        //Muestro los productos utilizando forEach con lambda expresions:
+        //Muestro los productos utilizando forEach de la clase hashMap con lambda expresions:
         hashMap.forEach((key, value) -> System.out.printf("%-20s %-10d \n", value.getNom(), value.getCantidad()));
 
 
@@ -306,19 +310,14 @@ public class Supermercat {
             System.out.println("Error: Entrada inválida. Ingresa un número válido para el precio y el código de barras.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
-        } finally {
-            // Cierro el Scanner en el bloque finally
-            if (scan != null) {
-                scan.close();
-            }
         }
     }
 
     public static void afegirElectronica() {
-        float preu = 0;
-        String nom = "";
-        int codiBarres = 0;
-        int dias_garantia = 0;
+        float preu;
+        String nom;
+        int codiBarres;
+        int dias_garantia;
         try {
             if (noSuperaNumMaxProd()) {
                 System.out.println("Electronica:");
@@ -344,19 +343,15 @@ public class Supermercat {
             System.out.println("Error: Entrada inválida. Ingresa un número válido para el precio, código de barras y los días de garantía.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
-        } finally {
-            // Cierro el Scanner en el bloque finally
-            if (scan != null) {
-                scan.close();
-            }
+
         }
     }
 
     public static void afegirAliment() {
-        float preu = 0;
-        String nom = "";
-        int codiBarres = 0;
-        LocalDate dataCaducitat = null;
+        float preu;
+        String nom;
+        int codiBarres;
+        LocalDate dataCaducitat;
         try {
             if (noSuperaNumMaxProd()) {
                 System.out.println("Alimentacion:");
@@ -384,13 +379,9 @@ public class Supermercat {
             System.out.println("Error: Entrada inválida. Asegúrate de ingresar un número válido para el precio y el código de barras, y una fecha de caducidad en el formato correcto (aaaa-MM-dd).");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
-        } finally {
-            // Cierro el Scanner en el bloque finally
-            if (scan != null) {
-                scan.close();
-            }
         }
     }
+
     /**
      * @return Devuelve true o false en funcion del numero de productos
      */
